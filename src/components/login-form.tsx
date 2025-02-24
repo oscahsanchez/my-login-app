@@ -1,12 +1,22 @@
+"use client"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
+  const router = useRouter()
+
+  const handleGoogleLogin = () => {
+    router.push("/dashboard")
+  }
+
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>
       <div className="flex flex-col items-center gap-2 text-center">
@@ -40,7 +50,12 @@ export function LoginForm({
             Or continue with
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button 
+          variant="outline" 
+          className="w-full" 
+          type="button" 
+          onClick={handleGoogleLogin}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
