@@ -9,6 +9,20 @@ export default {
   ],
   theme: {
   	extend: {
+  		keyframes: {
+  			slideDown: {
+  				from: { height: "0" },
+  				to: { height: "var(--radix-collapsible-content-height)" },
+  			},
+  			slideUp: {
+  				from: { height: "var(--radix-collapsible-content-height)" },
+  				to: { height: "0" },
+  			},
+  		},
+  		animation: {
+  			slideDown: "slideDown 300ms ease-out",
+  			slideUp: "slideUp 300ms ease-out",
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
