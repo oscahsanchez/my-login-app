@@ -2,6 +2,8 @@
 
 import React from "react"
 import { GalleryVerticalEnd } from "lucide-react"
+import { usePathname } from "next/navigation"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   Sidebar,
   SidebarContent,
@@ -13,6 +15,8 @@ import {
 } from "@/components/ui/sidebar"
 
 export function AppSidebar() {
+  const pathname = usePathname()
+
   return (
     <SidebarProvider>
       <Sidebar>
@@ -24,47 +28,49 @@ export function AppSidebar() {
           <SidebarTrigger className="ml-auto" />
         </SidebarInset>
         <SidebarContent>
-          <SidebarMenu>
-            <SidebarMenuItem href="/dashboard" active>
-              Dashboard
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/calendar">
-              Calendar
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/customers">
-              Customers
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/factories">
-              Factories
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/suppliers">
-              Suppliers
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/contacts">
-              Contacts
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/opportunities">
-              Opportunities
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/quotes">
-              Quotes
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/orders">
-              Orders
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/production-orders">
-              Production Orders
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/purchase-orders">
-              Purchase Orders
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/invoices">
-              Invoices
-            </SidebarMenuItem>
-            <SidebarMenuItem href="/payments">
-              Payments
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <AnimatePresence>
+            <SidebarMenu>
+              <SidebarMenuItem href="/dashboard" active={pathname === '/dashboard'}>
+                Dashboard
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/calendar" active={pathname === '/calendar'}>
+                Calendar
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/customers" active={pathname === '/customers'}>
+                Customers
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/factories" active={pathname === '/factories'}>
+                Factories
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/suppliers" active={pathname === '/suppliers'}>
+                Suppliers
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/contacts" active={pathname === '/contacts'}>
+                Contacts
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/opportunities" active={pathname === '/opportunities'}>
+                Opportunities
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/quotes" active={pathname === '/quotes'}>
+                Quotes
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/orders" active={pathname === '/orders'}>
+                Orders
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/production-orders" active={pathname === '/production-orders'}>
+                Production Orders
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/purchase-orders" active={pathname === '/purchase-orders'}>
+                Purchase Orders
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/invoices" active={pathname === '/invoices'}>
+                Invoices
+              </SidebarMenuItem>
+              <SidebarMenuItem href="/payments" active={pathname === '/payments'}>
+                Payments
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </AnimatePresence>
         </SidebarContent>
       </Sidebar>
     </SidebarProvider>

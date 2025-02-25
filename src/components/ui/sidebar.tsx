@@ -3,6 +3,8 @@
 import * as React from "react"
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible"
 import { GalleryVerticalEnd } from "lucide-react"
+import Link from "next/link"
+import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
@@ -132,50 +134,38 @@ const SidebarMenu = React.forwardRef<
 })
 SidebarMenu.displayName = "SidebarMenu"
 
-const SidebarMenuButton = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    active?: boolean
-  }
->(({ className, active, ...props }, ref) => {
-  const { expanded } = React.useContext(SidebarContext)
-
-  return (
-    <button
-      ref={ref}
-      className={cn(
-        "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
-        active && "bg-accent text-accent-foreground",
-        !expanded && "justify-center px-2",
-        className
-      )}
-      {...props}
-    />
-  )
-})
-SidebarMenuButton.displayName = "SidebarMenuButton"
-
 const SidebarMenuItem = React.forwardRef<
   HTMLAnchorElement,
-  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-    active?: boolean
-  }
->(({ className, active, ...props }, ref) => {
-  const { expanded } = React.useContext(SidebarContext)
-
-  return (
-    <a
+  React.ComponentPropsWithoutRef<typeof Link> & { active?: boolean }
+>(({ className, active, children, ...props }, ref) => (
+  <div className="relative">
+    {active && (
+      <motion.div
+        layoutId="activeMenuItem"
+        className="absolute inset-0 rounded-md bg-accent"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      />
+    )}
+    <Link
       ref={ref}
       className={cn(
-        "flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
-        active && "bg-accent text-accent-foreground",
-        !expanded && "justify-center px-2",
+        "relative flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
+        "transition-all duration-200 ease-in-out",
+        {
+          "text-accent-foreground": active,
+          "hover:bg-accent/80": active,
+        },
         className
       )}
       {...props}
-    />
-  )
-})
+    >
+      {children}
+    </Link>
+  </div>
+))
 SidebarMenuItem.displayName = "SidebarMenuItem"
 
 export {
@@ -186,6 +176,5 @@ export {
   SidebarTrigger,
   SidebarContext,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } 
