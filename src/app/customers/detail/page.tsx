@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSearchParams } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -31,8 +31,12 @@ export default function CustomerDetailPage() {
   const searchParams = useSearchParams()
   const customerId = searchParams.get('id')
 
+  if (!customerId) {
+    return <div>Error: Customer ID is missing.</div>; // Handle missing ID
+  }
+
   const [customer, setCustomer] = useState<CustomerDetails>({
-    id: customerId || '',
+    id: customerId,
     name: "Customer " + customerId,
     email: `customer${customerId}@example.com`,
     phone: "(555) 123-4567",
@@ -137,6 +141,26 @@ export default function CustomerDetailPage() {
     )
   }
 
+  useEffect(() => {
+    console.log("Product ID:", customerId);
+    const foundCustomer = quotes.find(customer => customer.id === customerId) || invoices.find(customer => customer.id === customerId);
+    console.log("Found Customer:", foundCustomer);
+    setCustomer(foundCustomer ? {
+      id: customerId,
+      name: "Customer " + customerId,
+      email: `customer${customerId}@example.com`,
+      phone: "(555) 123-4567",
+      company: "Example Corp",
+      status: "active",
+      address: "123 Main St",
+      city: "New York",
+      country: "USA",
+      notes: "Important customer",
+      lastOrder: "2024-02-20",
+      totalOrders: 10
+    } : customer);
+  }, [customerId]);
+
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
       <AppSidebar />
@@ -146,7 +170,7 @@ export default function CustomerDetailPage() {
             <div>
               <Link 
                 href="/customers" 
-                className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+                className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to Customers
@@ -154,7 +178,7 @@ export default function CustomerDetailPage() {
               <h1 className="text-2xl font-bold mt-2">Customer Details</h1>
             </div>
             <Link href="/customers/contact">
-              <Button className="bg-green-600 hover:bg-green-700 text-white">
+              <Button className="bg-green-600 hover:bg-green-700 text-white transition-colors duration-200">
                 Add Contact
               </Button>
             </Link>

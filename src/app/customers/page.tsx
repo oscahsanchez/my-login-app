@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, DollarSign, Users, ShoppingCart, TrendingUp, ArrowUpRight, ArrowDownRight, Calendar } from "lucide-react"
+import { ChevronLeft, ChevronRight, DollarSign, Users, ShoppingCart, TrendingUp, ArrowUpRight, ArrowDownRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -96,81 +96,29 @@ export default function CustomersPage() {
       <AppSidebar />
       <main className="flex-1 p-6">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Users className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-sm font-medium">Total Customers</span>
+          {Object.entries(kpiData).map(([key, data]) => (
+            <Card key={key} className="hover:shadow-lg transition-shadow duration-200 bg-white rounded-lg border border-gray-200">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between space-x-4">
+                  <div className="flex items-center space-x-2">
+                    {key === 'totalCustomers' && <Users className="h-5 w-5 text-muted-foreground" />}
+                    {key === 'revenue' && <DollarSign className="h-5 w-5 text-muted-foreground" />}
+                    {key === 'averageOrders' && <ShoppingCart className="h-5 w-5 text-muted-foreground" />}
+                    {key === 'orderValue' && <TrendingUp className="h-5 w-5 text-muted-foreground" />}
+                    <span className="text-sm font-medium">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  </div>
+                  <span className={`flex items-center text-sm ${data.trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {data.trend}%
+                    {data.trend > 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
+                  </span>
                 </div>
-                <span className={`flex items-center text-sm ${kpiData.totalCustomers.trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {kpiData.totalCustomers.trend}%
-                  {kpiData.totalCustomers.trend > 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
-                </span>
-              </div>
-              <div className="mt-3">
-                <p className="text-2xl font-bold">{kpiData.totalCustomers.value}</p>
-                <p className="text-xs text-muted-foreground">{kpiData.totalCustomers.timeframe}</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-2">
-                  <DollarSign className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-sm font-medium">Total Revenue</span>
+                <div className="mt-3">
+                  <p className="text-2xl font-bold">{data.value}</p>
+                  <p className="text-xs text-muted-foreground">{data.timeframe}</p>
                 </div>
-                <span className={`flex items-center text-sm ${kpiData.revenue.trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {kpiData.revenue.trend}%
-                  {kpiData.revenue.trend > 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
-                </span>
-              </div>
-              <div className="mt-3">
-                <p className="text-2xl font-bold">${kpiData.revenue.value.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">{kpiData.revenue.timeframe}</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-2">
-                  <ShoppingCart className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-sm font-medium">Average Orders</span>
-                </div>
-                <span className={`flex items-center text-sm ${kpiData.averageOrders.trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {kpiData.averageOrders.trend}%
-                  {kpiData.averageOrders.trend > 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
-                </span>
-              </div>
-              <div className="mt-3">
-                <p className="text-2xl font-bold">{kpiData.averageOrders.value}</p>
-                <p className="text-xs text-muted-foreground">{kpiData.averageOrders.timeframe}</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between space-x-4">
-                <div className="flex items-center space-x-2">
-                  <TrendingUp className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-sm font-medium">Average Order Value</span>
-                </div>
-                <span className={`flex items-center text-sm ${kpiData.orderValue.trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {kpiData.orderValue.trend}%
-                  {kpiData.orderValue.trend > 0 ? <ArrowUpRight className="h-4 w-4" /> : <ArrowDownRight className="h-4 w-4" />}
-                </span>
-              </div>
-              <div className="mt-3">
-                <p className="text-2xl font-bold">${kpiData.orderValue.value.toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">{kpiData.orderValue.timeframe}</p>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ))}
         </div>
         <div className="mb-6">
           <h1 className="text-2xl font-bold mb-4">Customers</h1>
@@ -178,35 +126,33 @@ export default function CustomersPage() {
             placeholder="Search customers..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-sm"
+            className="max-w-sm mb-4"
           />
         </div>
         <div className="rounded-lg border bg-card">
-          <Table>
+          <Table className="min-w-full">
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Company</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Last Order</TableHead>
-                <TableHead className="text-right">Total Orders</TableHead>
+                <TableHead className="bg-gray-200 text-xs">Name</TableHead>
+                <TableHead className="bg-gray-200 text-xs">Email</TableHead>
+                <TableHead className="bg-gray-200 text-xs">Phone</TableHead>
+                <TableHead className="bg-gray-200 text-xs">Company</TableHead>
+                <TableHead className="bg-gray-200 text-xs">Status</TableHead>
+                <TableHead className="bg-gray-200 text-xs">Last Order</TableHead>
+                <TableHead className="bg-gray-200 text-xs text-right">Total Orders</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentRecords.map((customer) => (
+              {currentRecords.map((customer, index) => (
                 <TableRow 
                   key={customer.id}
-                  className="cursor-pointer hover:bg-muted/50"
+                  className={`cursor-pointer transition-colors duration-200 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-100`}
                   onClick={() => window.location.href = `/customers/detail?id=${customer.id}`}
                 >
-                  <TableCell className="font-medium">
-                    {customer.name}
-                  </TableCell>
-                  <TableCell>{customer.email}</TableCell>
-                  <TableCell>{customer.phone}</TableCell>
-                  <TableCell>{customer.company}</TableCell>
+                  <TableCell className="text-sm font-medium">{customer.name}</TableCell>
+                  <TableCell className="text-sm">{customer.email}</TableCell>
+                  <TableCell className="text-sm">{customer.phone}</TableCell>
+                  <TableCell className="text-sm">{customer.company}</TableCell>
                   <TableCell>
                     <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                       customer.status === 'active' 
@@ -216,8 +162,8 @@ export default function CustomersPage() {
                       {customer.status}
                     </span>
                   </TableCell>
-                  <TableCell>{customer.lastOrder}</TableCell>
-                  <TableCell className="text-right">{customer.totalOrders}</TableCell>
+                  <TableCell className="text-sm">{customer.lastOrder}</TableCell>
+                  <TableCell className="text-sm text-right">{customer.totalOrders}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
